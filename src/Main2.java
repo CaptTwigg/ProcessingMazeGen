@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import processing.core.PApplet;
 
@@ -19,7 +20,7 @@ public class Main2 extends PApplet {
 
   @Override
   public void settings() {
-    size(400, 400);  // Size should be the first statement
+    size(100, 100);  // Size should be the first statement
     cols = width / wallLength;
     rows = height / wallLength;
   }
@@ -28,6 +29,8 @@ public class Main2 extends PApplet {
   public void setup() {
     processing = this;
     background(51);
+    frameRate(5);
+
 
     for (int x = 0; x < cols; x++) {
       for (int y = 0; y < rows; y++) {
@@ -44,7 +47,9 @@ public class Main2 extends PApplet {
     }
 
     currentCell.visited = true;
-    currentCell.checkNeighbors();
+
+    currentCell = currentCell.checkNeighbors();
+
   }
 
 
@@ -54,11 +59,12 @@ public class Main2 extends PApplet {
     int x, y;
     boolean walls[] = {true, true, true, true};
     boolean visited = false;
+    int num = 1;
 
 
     public Cell(int x, int y) {
-      this.x = x ;
-      this.y = y ;
+      this.x = x;
+      this.y = y;
 
     }
 
@@ -80,36 +86,38 @@ public class Main2 extends PApplet {
       Cell bottom;
       Cell left;
 
-      if(topIndex != -1){
+      if (topIndex != -1) {
         top = grid.get(topIndex);
-        if (!top.visited ) {
+        if (!top.visited) {
           neighbors.add(top);
         }
       }
 
-      if(rightIndex != -1){
+      if (rightIndex != -1) {
         right = grid.get(rightIndex);
-        if (!right.visited ) {
+        if (!right.visited) {
           neighbors.add(right);
         }
       }
 
-      if(bottomIndex != -1){
+      if (bottomIndex != -1) {
         bottom = grid.get(bottomIndex);
-        if (!bottom.visited ) {
+        if (!bottom.visited) {
           neighbors.add(bottom);
         }
       }
 
-      if(leftIndex != -1){
+      if (leftIndex != -1) {
         left = grid.get(leftIndex);
-        if (!left.visited ) {
+        if (!left.visited) {
           neighbors.add(left);
         }
       }
 
-      if(neighbors.size() > 0){
-        int randomN = floor(random(0,neighbors.size()));
+      if (neighbors.size() > 0) {
+        num++;
+        int randomN = floor(random(0, neighbors.size()));
+        System.out.println(neighbors.get(randomN));
         return neighbors.get(randomN);
       }
       return null;
@@ -132,9 +140,16 @@ public class Main2 extends PApplet {
       if (visited) {
         fill(0, 255, 0);
         rect(x, y, wallLength, wallLength);
+        fill(0);
+        text(num, x + 5, y - 5);
       }
 
     }
 
+    @Override
+    public String toString() {
+      return String.format("x: %s y: %s walls: %s visited: %s "
+        , this.x, this.y, Arrays.toString(this.walls), this.visited);
+    }
   }
 }
